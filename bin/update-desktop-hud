@@ -1,0 +1,176 @@
+#!/usr/bin/env python3
+# ==============================================================================
+# Tool: update-desktop-hud
+# Purpose: Clean Vector Cyber-Brutalist Desktop Wallpaper HUD (Wrapped Typography)
+# Target: ASUS ROG Zephyrus G14 (GA402RJ) / GNOME Wayland
+# Author: Patrick Isles
+# ==============================================================================
+
+import os, random, textwrap, subprocess
+from PIL import Image, ImageDraw, ImageFont
+
+OUT_PATH = os.path.expanduser('~/Pictures/Wallpapers/arasaka_bataille_noir.png')
+FONT_DIR = os.path.expanduser('~/.local/share/fonts/JetBrainsMono')
+
+W, H = 3840, 2160
+im = Image.new('RGB', (W, H), (8, 9, 13))
+overlay = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+draw = ImageDraw.Draw(overlay)
+
+# Fonts
+f_hud_title = ImageFont.truetype(f'{FONT_DIR}/JetBrainsMonoNerdFont-Bold.ttf', 30)
+f_hud_sub   = ImageFont.truetype(f'{FONT_DIR}/JetBrainsMonoNerdFont-Bold.ttf', 14)
+f_mono_lbl  = ImageFont.truetype(f'{FONT_DIR}/JetBrainsMonoNerdFont-Bold.ttf', 13)
+f_mono_val  = ImageFont.truetype(f'{FONT_DIR}/JetBrainsMonoNerdFont-SemiBold.ttf', 19)
+f_quote     = ImageFont.truetype(f'{FONT_DIR}/JetBrainsMonoNerdFont-Italic.ttf', 19)
+f_quote_sub = ImageFont.truetype(f'{FONT_DIR}/JetBrainsMonoNerdFont-Medium.ttf', 14)
+
+# Colors
+C_RED        = (230, 0, 54, 255)       # #E60036 Arasaka Crimson
+C_DARK_WINE  = (28, 5, 10, 255)        # Deep atmospheric wine
+C_WHITE      = (226, 230, 240, 255)
+C_GRAY       = (125, 132, 150, 255)
+C_GOLD       = (245, 186, 66, 255)     # Solar Gold
+
+# 1. Left Angular Geometric Section (Inspired by Image 1)
+poly_points = [(0, 0), (int(W * 0.44), 0), (int(W * 0.28), H), (0, H)]
+draw.polygon(poly_points, fill=C_DARK_WINE)
+draw.line([(int(W * 0.44), 0), (int(W * 0.28), H)], fill=(120, 15, 35, 180), width=3)
+draw.line([(int(W * 0.44) + 6, 0), (int(W * 0.28) + 6, H)], fill=(230, 0, 54, 100), width=1)
+
+for y in range(0, H, 8):
+    x_edge = int(W * 0.44 - ((W * 0.44 - W * 0.28) * (y / H)))
+    draw.line([(0, y), (x_edge, y)], fill=(0, 0, 0, 55), width=2)
+
+cx, cy = int(W * 0.18), int(H * 0.52)
+draw.ellipse([cx - 260, cy - 260, cx + 260, cy + 260], outline=(70, 10, 22, 120), width=4)
+draw.ellipse([cx - 180, cy - 180, cx + 180, cy + 180], outline=(100, 15, 30, 80), width=2)
+draw.ellipse([cx - 60, cy - 60, cx + 60, cy + 60], fill=(70, 10, 22, 100))
+draw.line([(cx - 300, cy), (cx + 300, cy)], fill=(90, 12, 28, 90), width=1)
+draw.line([(cx, cy - 300), (cx, cy + 300)], fill=(90, 12, 28, 90), width=1)
+
+draw.text((80, 120), 'SOVEREIGNTY // THE ACCURSED SHARE', font=f_hud_sub, fill=(160, 25, 45, 140))
+draw.text((80, H - 120), 'SYS.ID: 1002:73ef // G14.REM.042', font=f_hud_sub, fill=(130, 20, 38, 140))
+
+# 2. Right Side: The Telemetry HUD Card
+hud_w = 820
+x1 = W - hud_w - 120
+y1 = 140
+
+# Read system metrics
+with open('/proc/uptime') as f:
+    up_secs = int(float(f.readline().split()[0]))
+    up_str = f'{up_secs // 3600}h {(up_secs % 3600) // 60}m'
+
+with open('/proc/meminfo') as f:
+    lines = f.readlines()
+    mem_total = int([x for x in lines if 'MemTotal' in x][0].split()[1]) // 1024
+    mem_avail = int([x for x in lines if 'MemAvailable' in x][0].split()[1]) // 1024
+    mem_used = mem_total - mem_avail
+    mem_pct = int((mem_used / mem_total) * 100)
+
+cpu_temp, gpu_temp = 'N/A', 'N/A'
+for hw in os.listdir('/sys/class/hwmon'):
+    hw_p = os.path.join('/sys/class/hwmon', hw)
+    if os.path.exists(f'{hw_p}/name'):
+        name = open(f'{hw_p}/name').read().strip()
+        if 'k10temp' in name and os.path.exists(f'{hw_p}/temp1_input'):
+            with open(f'{hw_p}/temp1_input') as tf:
+                cpu_temp = f'{int(tf.read().strip()) // 1000}°C'
+        elif 'amdgpu' in name and os.path.exists(f'{hw_p}/temp1_input'):
+            with open(f'{hw_p}/temp1_input') as tf:
+                gpu_temp = f'{int(tf.read().strip()) // 1000}°C'
+
+quotes = [
+    '\"The accursed share: that which cannot be contained must be expended.\"',
+    '\"The world of energy demands an excess—a glorious sacrifice of power without profit.\"',
+    '\"Sovereignty is the power to rise above the slavish realm of utility.\"',
+    '\"The living organism receives more energy than is necessary for maintaining life: the excess must be spent.\"',
+    '\"Communication requires a breach: it exists only between two wounds.\"'
+]
+quote = random.choice(quotes)
+wrapped_quote = textwrap.wrap(quote, width=50)
+
+# Calculate height with generous bottom padding so the quote never clips
+quote_h = len(wrapped_quote) * 28
+hud_h = 110 + 324 + 45 + 35 + quote_h + 38 + 45
+x2 = x1 + hud_w
+y2 = y1 + hud_h
+
+# Frosted Card Base
+draw.rectangle([x1, y1, x2, y2], fill=(12, 13, 19, 225))
+
+# Cyber-Brackets
+b_len = 32
+draw.line([(x1, y1), (x1 + b_len, y1)], fill=C_RED, width=3)
+draw.line([(x1, y1), (x1, y1 + b_len)], fill=C_RED, width=3)
+draw.line([(x2, y1), (x2 - b_len, y1)], fill=C_RED, width=3)
+draw.line([(x2, y1), (x2 - b_len, y1)], fill=C_RED, width=3)
+draw.line([(x1, y2), (x1 + b_len, y2)], fill=C_RED, width=3)
+draw.line([(x1, y2), (x1, y2 - b_len)], fill=C_RED, width=3)
+draw.line([(x2, y2), (x2 - b_len, y2)], fill=C_RED, width=3)
+draw.line([(x2, y2), (x2 - b_len, y2)], fill=C_RED, width=3)
+draw.rectangle([x1, y1, x2, y2], outline=(230, 0, 54, 80), width=1)
+
+# Header
+cur_y = y1 + 35
+draw.text((x1 + 45, cur_y), '◈ ARASAKA // TELEMETRY HUD', font=f_hud_title, fill=C_RED)
+cur_y += 42
+draw.text((x1 + 45, cur_y), 'ASUS ROG ZEPHYRUS G14 • REMBRANDT ZEN 3+ • NAVI 23', font=f_hud_sub, fill=C_GRAY)
+cur_y += 26
+draw.line([(x1 + 45, cur_y), (x2 - 45, cur_y)], fill=(50, 55, 70, 200), width=1)
+cur_y += 24
+
+metrics = [
+    ('SYSTEM IDENT', 'pat@ROG-Zephyrus-G14 // Linux 7.0.0-42'),
+    ('SESSION UPTIME', up_str),
+    ('CPU STATUS', f'AMD Ryzen 9 6900HS (16T @ 3.3 GHz) [{cpu_temp}]'),
+    ('dGPU STATUS', f'AMD Radeon RX 6700S [8GB VRAM] [{gpu_temp}]'),
+    ('MEMORY POOL', f'{mem_used} MiB / {mem_total} MiB ({mem_pct}%)'),
+    ('KERNEL DEFENSE', 'UFW Active // Fail2ban Shield Engaged'),
+]
+
+for label, val in metrics:
+    draw.text((x1 + 45, cur_y), label, font=f_mono_lbl, fill=C_RED)
+    cur_y += 18
+    draw.text((x1 + 45, cur_y), val, font=f_mono_val, fill=C_WHITE)
+    cur_y += 34
+
+cur_y += 4
+draw.line([(x1 + 45, cur_y), (x2 - 45, cur_y)], fill=(50, 55, 70, 200), width=1)
+cur_y += 22
+
+# RAM Bar
+bar_w = hud_w - 90
+bar_h = 8
+fill_w = int(bar_w * (mem_pct / 100))
+draw.rectangle([x1 + 45, cur_y, x1 + 45 + bar_w, cur_y + bar_h], fill=(24, 26, 35, 255))
+draw.rectangle([x1 + 45, cur_y, x1 + 45 + fill_w, cur_y + bar_h], fill=C_RED)
+cur_y += 26
+
+# Quote Header
+draw.text((x1 + 45, cur_y), '─── NON-PRODUCTIVE EXPENDITURE ───', font=f_hud_sub, fill=C_GRAY)
+cur_y += 26
+
+# Recessed Quote Callout Box
+callout_y1 = cur_y
+callout_y2 = cur_y + quote_h + 46
+draw.rectangle([x1 + 45, callout_y1, x2 - 45, callout_y2], fill=(18, 20, 28, 200))
+draw.line([(x1 + 45, callout_y1), (x1 + 45, callout_y2)], fill=C_RED, width=3)
+
+# Render Wrapped Quote Inside Box
+text_y = callout_y1 + 14
+for line in wrapped_quote:
+    draw.text((x1 + 65, text_y), line, font=f_quote, fill=C_GOLD)
+    text_y += 28
+
+text_y += 6
+draw.text((x1 + 65, text_y), '— Georges Bataille, La Part Maudite (1949)', font=f_quote_sub, fill=C_GRAY)
+
+# Composite and Save
+final_img = Image.alpha_composite(im.convert('RGBA'), overlay).convert('RGB')
+final_img.save(OUT_PATH, 'PNG')
+
+env = dict(os.environ, DBUS_SESSION_BUS_ADDRESS='unix:path=/run/user/1000/bus')
+subprocess.run(['gsettings', 'set', 'org.gnome.desktop.background', 'picture-uri', f'file://{OUT_PATH}'], env=env)
+subprocess.run(['gsettings', 'set', 'org.gnome.desktop.background', 'picture-uri-dark', f'file://{OUT_PATH}'], env=env)

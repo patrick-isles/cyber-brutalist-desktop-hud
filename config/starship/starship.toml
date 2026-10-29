@@ -1,0 +1,57 @@
+# ─────────────────────────────────────────────────────────────
+# STARSHIP PROMPT — ARASAKA / BATAILLE NOIR
+# ─────────────────────────────────────────────────────────────
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$cmd_duration\
+$line_break\
+$character"""
+
+right_format = """"""
+
+continuation_prompt = "[∙ ](bold #383c4a)"
+
+[directory]
+style = "bold #e6e8ee"
+format = "[$path]($style) "
+truncation_length = 3
+truncation_symbol = "…/"
+read_only = " 󰌾"
+read_only_style = "#e60036"
+
+[git_branch]
+style = "italic #00e676"
+format = "[$symbol$branch]($style) "
+symbol = "󰘬 "
+
+[git_status]
+style = "bold #ff1a53"
+format = "([$all_status$ahead_behind]($style) )"
+conflicted = "󰞇 "
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+untracked = "?${count} "
+modified = "!${count} "
+staged = "+${count} "
+renamed = "»${count} "
+deleted = "✘${count} "
+
+[cmd_duration]
+min_time = 2_000
+style = "italic #ffb703"
+format = "[$duration]($style) "
+
+[character]
+success_symbol = "[❯](bold #e60036)"
+error_symbol = "[❯](bold #ff003c)"
+vimcmd_symbol = "[❮](bold #00f0ff)"
+
+[package]
+disabled = true
+
+[python]
+disabled = true

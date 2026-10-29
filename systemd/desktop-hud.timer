@@ -1,0 +1,10 @@
+[Unit]
+Description=Periodic Update for Desktop HUD Wallpaper
+
+[Timer]
+OnBootSec=15sec
+OnUnitActiveSec=5min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,66 @@
+# ─────────────────────────────────────────────────────────────
+# GHOSTTY CONFIGURATION — ARASAKA / BATAILLE CYBER-NOIR
+# ─────────────────────────────────────────────────────────────
+
+# Typography
+font-family = "JetBrainsMono Nerd Font"
+font-size = 13.5
+line-height = 1.25
+
+# Window & Transparency
+background-opacity = 0.88
+background-blur = true
+window-padding-x = 20
+window-padding-y = 20
+window-decoration = false
+
+# Cursor (Arasaka Crimson Pulse)
+cursor-style = bar
+cursor-style-blink = true
+cursor-color = #ff003c
+cursor-text = #08080c
+
+# Selection (Wine / Arterial Highlight)
+selection-background = #420a16
+selection-foreground = #ffffff
+
+# ARASAKA / BATAILLE PALETTE (Obsidian, Arterial Crimson, Neon Cyan)
+background = #08080c
+foreground = #e6e8ee
+
+# Black / Ash
+palette = 0=#12131a
+palette = 8=#383c4a
+
+# Red / Crimson (The Accursed Share / Arasaka Vermillion)
+palette = 1=#e60036
+palette = 9=#ff1a53
+
+# Green / Cyber Acid / Dried Sage
+palette = 2=#00e676
+palette = 10=#26ff8f
+
+# Yellow / Solar Gold / Amber
+palette = 3=#ffb703
+palette = 11=#ffc933
+
+# Blue / Cyber Slate
+palette = 4=#3a86ff
+palette = 12=#66a1ff
+
+# Magenta / Neon Violet
+palette = 5=#b5179e
+palette = 13=#d136b8
+
+# Cyan / Neural Frost
+palette = 6=#00f0ff
+palette = 14=#33f3ff
+
+# White / Titanium Chalk
+palette = 7=#c5c9d4
+palette = 15=#ffffff
+
+# Mouse & Behavior
+mouse-hide-while-typing = true
+scrollback-limit = 10000
+confirm-close-surface = false

@@ -1,0 +1,11 @@
+[Unit]
+Description=Update Desktop HUD Wallpaper
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/pat/.local/bin/update-desktop-hud
+Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus"
+
+[Install]
+WantedBy=default.target

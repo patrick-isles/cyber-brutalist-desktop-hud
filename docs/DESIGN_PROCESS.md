@@ -39,7 +39,7 @@ Great engineering is defined by how aggressively flawed assumptions are dismantl
 ### ⚠️ Failure 2: The Stretched Raster Disaster ("Looks God Awful")
 * **The Agent's Mistake**: The agent attempted to use Reference 2 as a wallpaper by taking a 1024×435 image, scaling it up to 3840×2160, adding flat letterbox padding, and slapping an oversized `127.0.0.1` label at the bottom.
 * **The User's Critique**:
-  > *"I wasn't specific enough. I meant to say that you should do something inspired by the images. It looks god awful in terms of aesthetics. I love whatever you put on the right side with the Bataille quote but everything else looks like ass."*
+  > *"I wasn't specific enough. I meant to say that you should do something inspired by the images. It looks completely off in terms of aesthetics. I like whatever was done on the right side with the Bataille quote, but the rest of the composition does not work at all."*
 * **Root Cause Analysis**:
   1. **Scaling Low-Res Assets to 4K**: Scaling a 1024px raster image across a 4320×2430 display produced blurry, muddy artifacts and harsh banding.
   2. **Superficial Trope Copying**: Pasting giant IP text at the bottom looked tacky and derivative, completely missing the refined architectural quality of the inspiration.
@@ -81,5 +81,5 @@ The resulting engine (**`update-desktop-hud`**) is a standalone Python daemon:
 
 ## 5. Key Takeaways for Human-Agent Pair Programming
 1. **Aesthetic Precision Requires Mathematical Discipline**: Layouts look broken not because the concept is wrong, but because font bounding boxes, margins, and line-wrapping were assumed rather than calculated.
-2. **Accept User Roasts Directly**: When a user says an implementation *"looks like ass"*, defensive explanations are useless. Isolate what worked (the right-side HUD), delete what failed (the blurry background), and rebuild the rest with higher engineering standards.
+2. **Accept Direct Feedback**: When a user points out that an implementation's aesthetics are completely off, defensive explanations are useless. Isolate what worked (the right-side HUD), eliminate what failed (the blurry background), and rebuild with higher engineering standards.
 3. **Procedural Vectors > Stretched Bitmaps**: Never stretch reference bitmaps for high-DPI displays. Build native procedural vector rendering that scales infinitely.

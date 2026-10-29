@@ -80,7 +80,7 @@ update-desktop-hud
 
 For a detailed case study covering:
 * **The original brainstorming** and visual references
-* **The candid user critiques** (*"looks god awful"*, *"quote exceeds the box"*)
+* **The candid user critiques** (*"aesthetic is off"*, *"quote exceeds the box"*)
 * **The mathematical fixes for Pillow text overflow and procedural vector generation**
 
 👉 Read the full writeup: **[docs/DESIGN_PROCESS.md](docs/DESIGN_PROCESS.md)**

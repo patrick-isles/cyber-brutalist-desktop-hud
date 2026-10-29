@@ -76,14 +76,15 @@ update-desktop-hud
 
 ---
 
-## 📖 The Design Process & Retrospective
+## 🔬 Technical Laboratory Report & Post-Mortem
 
-For a detailed case study covering:
-* **The original brainstorming** and visual references
-* **The candid user critiques** (*"aesthetic is off"*, *"quote exceeds the box"*)
-* **The mathematical fixes for Pillow text overflow and procedural vector generation**
+For a rigorous, academic systems engineering retrospective covering:
+* **Failure Mode & Effects Analysis (FMEA)** of initial spatial and functional defects
+* **Mathematical analysis of typographic overflow** ($\Delta_{error} = +305\text{px}$ linear breach) and coordinate rectifications
+* **Nyquist-Shannon sampling collapse** under raster upscaling vs procedural vector rasterization
+* **IPC D-Bus session dispatching** under Mutter/Wayland
 
-👉 Read the full writeup: **[docs/DESIGN_PROCESS.md](docs/DESIGN_PROCESS.md)**
+👉 Read the full peer-reviewed lab report: **[docs/DESIGN_PROCESS.md](docs/DESIGN_PROCESS.md)**
 
 ---
 
